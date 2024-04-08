@@ -120,8 +120,19 @@ function getPolynom(...coefficients) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = new Map();
+  return (...args) => {
+    const key = args
+      .map((arg) =>
+        typeof arg === 'object' ? Object.entries(arg).toString() : arg
+      )
+      .join(',');
+    if (!cache.has(key)) {
+      cache.set(key, func(...args));
+    }
+    return cache.get(key);
+  };
 }
 
 /**
